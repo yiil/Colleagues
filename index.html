@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Work Buddies</title>
+</head>
+
+<body ng-app="ApiExplorer" ng-controller="ApiExplorerCtrl" role="document">
+    <!--.<nav class="navbar navbar-fixed-top navbar-dark bg-inverse">
+        <div class="container">
+            <button class="navbar-toggler hidden-sm-up" type="button" data-toggle="collapse" data-target="#exCollapsingNavbar2">
+                &#9776;
+            </button>
+            <div class="collapse navbar-toggleable-xs" id="exCollapsingNavbar2">
+                <a class="navbar-brand" id="titleElt" href="#">Work Buddies</a>
+                <ul class="nav navbar-nav pull-right">
+                    <li class="nav-item"><a class="nav-link" href="#" ng-show="userInfo.isAuthenticated" ng-click="logout()">Sign Out</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" ng-hide="userInfo.isAuthenticated" ng-click="login()">Sign In</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>-->
+
+<h1 class=titleElt>
+Work Buddies
+</h1>
+
+<div class=titleElt ng-hide="userInfo.isAuthenticated">
+    <button ng-click="login()">
+    Sign In
+    </button>
+</div>
+
+<div class=titleElt ng-show="showPref">
+<div class=titleElt>
+interests
+</div>
+<textarea id="interests" rows="4" cols="50">
+</textarea>
+    <button ng-click="submitInterests()">
+    Submit
+    </button>
+</div>
+
+<div class=titleElt ng-show="showApp">
+    <!-- start padding container -->
+    <div class="wrap">
+        <!-- start jtinder container -->
+        <div id="tinderslide">
+            <ul>
+                <li class="pane1">
+                    <div class="img"></div>
+                    <div>Miami Beach</div>
+                    <div class="like"></div>
+                    <div class="dislike"></div>
+                </li>
+                <li class="pane2">
+                    <div class="img"></div>
+                    <div>San Francisco</div>
+                    <div class="like"></div>
+                    <div class="dislike"></div>
+                </li>
+                <li class="pane3">
+                    <div class="img"></div>
+                    <div>Chicago</div>
+                    <div class="like"></div>
+                    <div class="dislike"></div>
+                </li>
+                <li class="pane4">
+                    <div class="img"></div>
+                    <div>New York</div>
+                    <div class="like"></div>
+                    <div class="dislike"></div>
+                </li>
+                <li class="pane5">
+                    <div class="img"></div>
+                    <div>Beach</div>
+                    <div class="like"></div>
+                    <div class="dislike"></div>
+                </li>
+            </ul>
+        </div>
+        <!-- end jtinder container -->
+    </div>
+    <!-- end padding container -->
+
+    <!-- jTinder trigger by buttons  -->
+    <div class="actions">
+        <a href="#" class="dislike"><i></i></a>
+        <a href="#" class="like"><i></i></a>
+    </div>
+
+    <!-- jTinder status text  -->
+    <div id="status"></div>
+</div>
+
+    <!--    move this into the controller-->
+    <div ng-controller="datalistCtrl">
+        <datalist id="requestList">
+            <option data-ng-repeat="ttl in urlOptions" value="{{ttl}}">
+        </datalist>
+    </div>
+
+    <div class="container body-content" ng-controller="FormCtrl" ng-show="false">
+        <div class="input-group">
+            <div class="input-group-btn" ng-controller="DropdownCtrl">
+                <div class="btn-group" uib-dropdown on-toggle="toggled(open)">
+                    <button id="http-verb-button" type="button" class="btn btn-default" uib-dropdown-toggle>
+                        {{selectedOptions}} <span class="caret"></span>
+                    </button>
+                    <ul class="uib-dropdown-menu">
+                        <li ng-repeat="choice in items">
+                            <a ng-click="OnItemClick(choice)">{{choice}}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <form class="main-query" ng-submit="submit()">
+                <!--    the style addition is for compatibility with IE11-->
+                <input type="text" ng-model="text" name="text" class="form-control" placeholder="query" list="requestList" id="queryBar" style="height: 38px" autocomplete="off" />
+            </form>
+            <div class="input-group-btn" id="duration" ng-show="showDuration">
+                <div class="btn-group" uib-dropdown on-toggle="toggled(open)">
+                    <button id="timeButton" type="button" class="btn btn-default" ng-model="duration" name="duration">
+                        {{duration}}
+                    </button>
+                </div>
+            </div>
+            <div class="input-group-btn" ng-controller="VersionCtrl" style="z-index: 99">
+                <div class="btn-group" uib-dropdown on-toggle="toggled(open)">
+                    <button id="version-button" type="button" class="btn btn-default" uib-dropdown-toggle>
+                        {{selectedVersion}} <span class="caret"></span>
+                    </button>
+                    <ul class="uib-dropdown-menu">
+                        <li ng-repeat="choice in items">
+                            <a ng-click="OnItemClick(choice)">{{choice}}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <img id="img" width="250px" height="250px" ng-show="showImage" />
+        <div id="jsonEditor" ng-show="showJsonEditor"></div>
+        <div id="jsonViewer" ng-show="showJsonViewer"></div>
+        <br/>
+    </div>
+
+    <!--    scripts are loaded here-->
+    <link rel="stylesheet" href="./bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./src/api-explorer.css">
+    <link rel="stylesheet" href="./bower_components/ngprogress/ngProgress.css">
+    <!-- Ace not available currently on bower -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/ace.js"></script>
+    <script src="./src/api-explorer-helpers.js"></script>
+    <script src="./src/api-explorer-jsviewer.js"></script>
+    <script src="./src/api-explorer-jseditor.js"></script>
+    <script src="./src/constants.js"></script>
+    <script src="./bower_components/angular/angular.min.js"></script>
+    <script src="./bower_components/angular-route/angular-route.min.js"></script>
+    <script src="./bower_components/angular-animate/angular-animate.min.js"></script>
+    <script src="./bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script src="https://secure.aadcdn.microsoftonline-p.com/lib/1.0.0/js/adal.min.js"></script>
+    <script src="https://secure.aadcdn.microsoftonline-p.com/lib/1.0.0/js/adal-angular.min.js"></script>
+
+    <script src="./bower_components/ngprogress/build/ngprogress.min.js"></script>
+
+    <script src="./src/api-explorer-init.js"></script>
+    <script src="./src/api-explorer-app.js"></script>
+    <script src="./src/api-explorer-svc.js"></script>
+    <script src="./src/api-explorer-msgraph.js"></script>
+    <script src="./src/api-explorer-ctrl.js"></script>
+    <link rel="stylesheet" type="text/css" href="./src/jTinder.css">
+    <!-- jQuery lib -->
+    <script type="text/javascript" src="./src/jquery.min.js"></script>
+    <!-- transform2d lib -->
+    <script type="text/javascript" src="./src/jquery.transform2d.js"></script>
+    <!-- jTinder lib -->
+    <script type="text/javascript" src="./src/jquery.jTinder.js"></script>
+    <!-- jTinder initialization script -->
+    <script type="text/javascript" src="./src/main.js"></script>    
+    
+</body>
+
+</html>
