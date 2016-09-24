@@ -1,3 +1,23 @@
+angular.module('ApiExplorer').directive('imageloaded', [
+
+    function () {
+
+        'use strict';
+
+        return {
+            restrict: 'A',
+
+            link: function(scope, element, attrs) {   
+                var cssClass = attrs.loadedclass;
+
+                element.bind('load', function (e) {
+                    angular.element(element).addClass(cssClass);
+                });
+            }
+        }
+    }
+]);
+
 angular.module('ApiExplorer')
     .controller('ApiExplorerCtrl', ['$scope', 'adalAuthenticationService', '$location', 'ApiExplorerSvc', function ($scope, adalService, $location, apiService) {
         var expanded = true;
@@ -10,6 +30,29 @@ angular.module('ApiExplorer')
         $scope.showPref = false;
         $scope.showImage = false;
         $scope.showApp = false;
+        $scope.showInterestTextbox = false;
+        
+
+$scope.photos = [
+    {'name': 'Sports', src: "http://lorempixel.com/130/170/sports/sports"},
+    {'name': 'Career', src: "http://lorempixel.com/130/170/business/career"},
+    {'name': 'Sports', src: "http://lorempixel.com/130/170/cats/pets"},
+    {'name': 'Sports', src: "http://lorempixel.com/130/170/nightlife/nightlife"},
+    {'name': 'Sports', src: "http://lorempixel.com/130/170/technics/tech"},
+    {'name': 'Sports', src: "http://lorempixel.com/130/170/transport/travel"},
+    {'name': 'Sports', src: "http://lorempixel.com/130/170/nature/hiking"},
+    {'name': 'Sports', src: "http://lorempixel.com/130/170/food/food"},
+    {'name': 'Sports', src: "http://lorempixel.com/130/170/fashion/fashion"},
+    {'name': 'Sports', src: "http://lorempixel.com/130/170/sports/3/Paragliding"},
+    {'name': 'Career', src: "http://lorempixel.com/130/170/business/2/Personal%20Developement"},
+    {'name': 'Sports', src: "http://lorempixel.com/130/170/cats/2/Cats"},
+    {'name': 'Sports', src: "http://lorempixel.com/130/170/nightlife/2/Dancing"},
+    {'name': 'Sports', src: "http://lorempixel.com/130/170/technics/2/Apple tech"},
+    {'name': 'Sports', src: "http://lorempixel.com/130/170/transport/2/Rain"},
+    {'name': 'Sports', src: "http://lorempixel.com/130/170/nature/2/Scenery"},
+    {'name': 'Sports', src: "http://lorempixel.com/130/170/food/2/Healthy%20Eating"},
+    {'name': 'Sports', src: "http://lorempixel.com/130/170/fashion/2/Bollywood"}    
+];        
 
         initializeJsonViewer($scope, run, apiService);
 
@@ -23,11 +66,14 @@ angular.module('ApiExplorer')
             return viewLocation === $location.path();
         };
 
+        $scope.showCustomInterests = function(){
+            $scope.showInterestTextbox = true;
+        }
+
         $scope.submitInterests = function(){
             $scope.showPref = false;
             $scope.showApp = true;
         }
-
         $scope.$on('adal:loginSuccess', function(){
             if($scope.userInfo.isAuthenticated){
                 apiService.performQuery("GET")("https://graph.microsoft.com/v1.0/me", "").success(function (results, status, headers, config) {

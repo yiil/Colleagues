@@ -23,6 +23,7 @@
     "angular-route": "1.4.7",
     "angular-animate": "1.4.7",
     "adal-angular": "1.0.0",
-    "angular-bootstrap": "0.14.3"
+    "angular-bootstrap": "0.14.3",
+    "angular-deckgrid": "^0.5.0"
   }
 }

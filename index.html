@@ -31,12 +31,26 @@ Work Buddies
     </button>
 </div>
 
+<div class=titleElt ng-show="userInfo.isAuthenticated">
+    <button ng-click="logout()">
+    Sign Out
+    </button>
+</div>
+
 <div class=titleElt ng-show="showPref">
 <div class=titleElt>
-interests
+Hey {{userInfo.name}}! Tell me about your interests:
 </div>
-<textarea id="interests" rows="4" cols="50">
-</textarea>
+<div id="" style="overflow:scroll; height:600px;">
+<div class="deckgrid clearfix titleElt" deckgrid source="photos" data-imageloaded cardTemplate="uigrid2/templates/deckgrid-card.html" style="width=500px"></div>
+<div>
+    <button ng-click="showCustomInterests()" ng-hide="showInterestTextbox">
+        Can't find your interests? Add yours here!
+    </button>
+    <textarea id="customInterests" ng-show="showInterestTextbox" placeholder="Custom Interests..."></textarea>
+    <br/>
+</div>
+</div>
     <button ng-click="submitInterests()">
     Submit
     </button>
@@ -177,8 +191,9 @@ interests
     <!-- jTinder lib -->
     <script type="text/javascript" src="./src/jquery.jTinder.js"></script>
     <!-- jTinder initialization script -->
-    <script type="text/javascript" src="./src/main.js"></script>    
-    
+    <script type="text/javascript" src="./src/main.js"></script>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400' rel='stylesheet' type='text/css'>    
+    <script src="./bower_components/angular-deckgrid/angular-deckgrid.js"></script>    
 </body>
 
 </html>

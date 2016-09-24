@@ -12,14 +12,16 @@ body {
 /* Wrapper with padding */
 .wrap  {
     height: 300px;
-    padding: 5%;
+    text-align:center;
+    width: 50%;
 }
 
 #tinderslide {
     position: relative;
     background: #fff;
-    width: 95%;
+    width: 100%;
     height: 100%;
+    margin: 0px 50%;
 }
 
 #tinderslide ul {
