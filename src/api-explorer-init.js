@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('ApiExplorer', ['ngRoute', 'AdalAngular', 'ngAnimate', 'ui.bootstrap', 'ngProgress', 'akoenig.deckgrid'])
+angular.module('ApiExplorer', ['ngRoute', 'AdalAngular', 'ngAnimate', 'ui.bootstrap', 'ngProgress', 'akoenig.deckgrid', 'gajus.swing'])
     .config(['$routeProvider', '$httpProvider', 'adalAuthenticationServiceProvider', function ($routeProvider, $httpProvider, adalProvider) {
 
         $routeProvider.when("/Home", {
