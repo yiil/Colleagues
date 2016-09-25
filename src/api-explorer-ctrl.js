@@ -92,7 +92,7 @@ angular.module('ApiExplorer')
         }                
 
         $scope.showMatchScreen = function(){
-            apiService.performQuery("GET")("http://interestsdataapi.azurewebsites.net/api/Users/"+$scope.userId + "/matches", "").success(function (results, status, headers, config) {
+            apiService.performQuery("GET")("https://interestsdataapi.azurewebsites.net/api/Users/"+$scope.userId + "/matches", "").success(function (results, status, headers, config) {
                 $scope.showMatches = true;
                 $scope.showApp = false;
                 $scope.matches = [];
@@ -122,7 +122,7 @@ angular.module('ApiExplorer')
 
         $scope.throwoutright = function (eventName, eventObject) {
             approvedId = $scope.cards[$scope.cards.length - 1].id;
-            apiService.performQuery("POST")("http://interestsdataapi.azurewebsites.net/api/Users/"+$scope.userId + "/judge/" + approvedId + "?judgement=true", "").success(function (results, status, headers, config) {
+            apiService.performQuery("POST")("https://interestsdataapi.azurewebsites.net/api/Users/"+$scope.userId + "/judge/" + approvedId + "?judgement=true", "").success(function (results, status, headers, config) {
             }).error(function (err, status) {
             });
             console.log('throwoutright', eventObject);
@@ -243,7 +243,7 @@ $scope.photos = [
                 }
             }
             bodyElt += "]";
-            apiService.performQuery("POST")("http://interestsdataapi.azurewebsites.net/api/Users/"+$scope.userId, bodyElt).success(function (results, status, headers, config) {
+            apiService.performQuery("POST")("https://interestsdataapi.azurewebsites.net/api/Users/"+$scope.userId, bodyElt).success(function (results, status, headers, config) {
                 $scope.showPref = false;
                 results = JSON.stringify(results, null, 4).trim();
             }).error(function (err, status) {
@@ -255,7 +255,7 @@ $scope.photos = [
         }
 
         var getUsersAll = function(){
-            apiService.performQuery("GET")("http://interestsdataapi.azurewebsites.net/api/Users/" + $scope.userId + "/candidates", "").success(function (results, status, headers, config) {
+            apiService.performQuery("GET")("https://interestsdataapi.azurewebsites.net/api/Users/" + $scope.userId + "/candidates", "").success(function (results, status, headers, config) {
                 $scope.showPref = false;
                 if(results !== null){
                     $scope.showAppGetUsers(results);
@@ -269,7 +269,7 @@ $scope.photos = [
         }        
 
         var getUsers = function(){
-            apiService.performQuery("GET")("http://interestsdataapi.azurewebsites.net/api/Users/"+$scope.userId, "").success(function (results, status, headers, config) {
+            apiService.performQuery("GET")("https://interestsdataapi.azurewebsites.net/api/Users/"+$scope.userId, "").success(function (results, status, headers, config) {
                 $scope.showPref = false;
                 if(results !== null){
                     results = JSON.stringify(results, null, 4).trim();
