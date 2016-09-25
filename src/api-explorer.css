@@ -1,7 +1,21 @@
 body {
     background:rgba(0, 0, 0, .04);
     font-family: 'Open Sans', sans-serif;
-    font-size:70%;
+}
+
+body {
+  background: url(../img/backgroundMain.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;    
+}
+
+/* For width 400px and larger: */
+@media only screen and (min-width: 400px) {
+    body {
+       background-image: url('../img/backgroundMain.jpg');
+    }
 }
 
 a {
@@ -140,7 +154,7 @@ img {
 
 .panel {
     margin-bottom: 20px;
-    background-color: #fff;
+    background-color: #ddd;
     border: 1px solid transparent;
     border-radius: 4px;
     border-color:#ddd;
@@ -167,27 +181,43 @@ img {
 #viewport {
   width: 500px;
   height: 500px;
-  margin: 100px auto 0;
+  margin: 0px auto 0;
   position: relative; }
   #viewport .stack {
-    width: 200px;
-    height: 300px;
+    width: 300px;
+    height: 400px;
+    background: #ddd;
     position: absolute;
-    top: 100px;
-    left: 50%;
-    margin-left: -100px;
+    top: 50px;
+    left: 100px;
+    margin-left: 0px;
     border-radius: 10px; }
-  #viewport li {
-    width: 200px;
-    height: 300px;
+  #viewport .nameTitle{
+      font-size:25px;
+  }
+  #viewport .jobTitle{
+      font-size:15px;
+  }
+
+  #viewport .aboutMe{
+      font-size:10px;
+  }
+  #viewport .interests{
+      font-size:12px;
+  }  
+
+
+  #viewport li{
+    width: 300px;
+    height: 400px;
     list-style: none;
-    background: #fff;
+    background: #ECECEC;
     border-radius: 5px;
     position: absolute;
     top: 0;
     left: 0;
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.2), 1px 1px 1px rgba(0, 0, 0, 0.2);
-    line-height: 300px;
+    line-height: 25px;
     text-align: center;
     font-size: 10px;
     border: 10px solid #ECECEC;
@@ -236,3 +266,27 @@ img {
 
 input {
   width: 50px; }
+
+  .span2 {
+    display: block;
+    margin-bottom: 5px;
+}
+
+button {
+    padding: 1.05rem 2.75rem;
+    color: #ddd;
+    background-color:rgba(255,255,255,0.2);
+    opacity:40%;
+    font-weight: 100px;
+    text-transform: uppercase;
+    border-radius: 12rem;
+    border: .2rem solid #58aadc;
+    -webkit-transition: color .3s,border .3s;
+    transition: color .3s,border .3s;
+}
+
+#fixedbutton {
+    position: fixed;
+    top: 5px;
+    right: 5px; 
+}

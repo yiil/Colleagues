@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Work Buddies</title>
+    <title>Work buddies</title>
 </head>
 
 <body ng-app="ApiExplorer" ng-controller="ApiExplorerCtrl" role="document">
@@ -21,18 +21,18 @@
         </div>
     </nav>-->
 
-<h1 class=titleElt>
-Work Buddies
+<h1 class=titleElt style="color:#ddd;text-shadow: 2px 2px #000000;font-size:55px;padding-top:2%" >
+Work buddies
 </h1>
 
-<div class=titleElt ng-hide="userInfo.isAuthenticated">
+<div class=titleElt ng-hide="userInfo.isAuthenticated" style="margin-top:20%">
     <button ng-click="login()">
     Sign In
     </button>
 </div>
 
 <div class=titleElt ng-show="userInfo.isAuthenticated">
-    <button ng-click="logout()">
+    <button ng-click="logout()" id=fixedbutton>
     Sign Out
     </button>
 </div>
@@ -73,9 +73,19 @@ Hey {{displayName}}! Tell me about your interests:
                 swing-on-dragmove="dragmove(eventName, eventObject)"
                 swing-on-dragend="dragend(eventName, eventObject)"
                 ng-repeat="card in cards">
-                <img height="150" width="150" unselectable="on" data-ng-src="data:image/png;base64,{{card.photoData}}">
-                {{card.name}}
-                </li>
+                <img height="150" width="150" unselectable="on" data-ng-src="data:image/png;base64,{{card.photoData}}" style="margin-top:5px;margin-left:75px;margin-right:75px" >
+                        <div class="nameTitle span2">
+                            {{card.name}}
+                        </div>
+                        <div class="span2 jobTitle">
+                            {{card.jobTitle}}
+                        </div>
+                        <div class="span2 aboutMe">
+                            {{card.aboutMe}}
+                        </div>
+                        <div class="span2 interests">
+                            {{card.interests}}
+                        </div>
         </ul>
         </div>
 </div>
@@ -86,18 +96,18 @@ Hey {{displayName}}! Tell me about your interests:
     </button>
     
     <ul>
-        <li ng-repeat="item in matches" ng-click=viewMatchUser({{item.id}})>{{item.id}}</li>
+        <li ng-repeat="item in matches"><button ng-click=viewMatchUser(item.id)>{{item.id}}</button></li>
     </ul>
 </div>
 
-<div class=matchElt ng-show="showProfile">
+<div class=profileElt ng-show="showProfile">
     <button ng-click="backMatches()">
     Back
     </button>
     {{profileId}}
 </div>
 
-    <!--    move this into the controller-->
+    <!-- move this into the controller-->
     <div ng-controller="datalistCtrl">
         <datalist id="requestList">
             <option data-ng-repeat="ttl in urlOptions" value="{{ttl}}">

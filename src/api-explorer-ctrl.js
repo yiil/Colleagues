@@ -22,6 +22,8 @@ angular.module('ApiExplorer')
     .controller('ApiExplorerCtrl', ['$scope', 'adalAuthenticationService', '$location', 'ApiExplorerSvc', function ($scope, adalService, $location, apiService) {
         var expanded = true;
 
+        $scope.init = false;
+
         $scope.selectedOptions = "GET";
         $scope.selectedVersion = "v1.0";
         $scope.showJsonEditor = false;
@@ -58,12 +60,13 @@ angular.module('ApiExplorer')
         }                
 
         $scope.showMatchScreen = function(){
-            apiService.performQuery("GET")("http://interestsdataapi.azurewebsites.net/api/Users/"+$scope.userId + "/matches", bodyElt).success(function (results, status, headers, config) {
+            apiService.performQuery("GET")("http://interestsdataapi.azurewebsites.net/api/Users/"+$scope.userId + "/matches", "").success(function (results, status, headers, config) {
                 $scope.showMatches = true;
                 $scope.showApp = false;
+                $scope.matches = [];
 
                 for(var i = 0 ; i < results.length; i++){
-                    $scope.matches.push({ id: results[i].id});
+                    $scope.matches.push({ id: results[i].UserId});
                 }
                     
             }).error(function (err, status) {
@@ -80,8 +83,8 @@ angular.module('ApiExplorer')
         };
 
         $scope.throwoutright = function (eventName, eventObject) {
-            approvedId = $scope.cards[$scope.cards.length - 1].newId;
-            apiService.performQuery("GET")("http://interestsdataapi.azurewebsites.net/api/Users/"+$scope.userId + "/judge/" + approvedId, bodyElt).success(function (results, status, headers, config) {
+            approvedId = $scope.cards[$scope.cards.length - 1].id;
+            apiService.performQuery("POST")("http://interestsdataapi.azurewebsites.net/api/Users/"+$scope.userId + "/judge/" + approvedId + "?judgement=true", "").success(function (results, status, headers, config) {
             }).error(function (err, status) {
             });
             console.log('throwoutright', eventObject);
@@ -146,9 +149,17 @@ $scope.photos = [
             for(var i = 0 ; i < results.length; i++){
                 listOfIds.push(results[i].UserId);
                 var uid = results[i].UserId;
-                apiService.performQuery("GET")("https://graph.microsoft.com/beta/users/" + results[i].UserId +"?$select=interests,aboutMe,displayName, id", "").success(function (results, status, headers, config) {
+                var url = "https://graph.microsoft.com/v1.0/users/9a366e35-6378-41e1-bee1-f95fed7b7700";
+                var copyUrl = "https://graph.microsoft.com/beta/users/" + results[i].UserId +"?$select=interests,aboutMe,displayName,id,jobTitle";
+                apiService.performQuery("GET")(copyUrl, "").success(function (results, status, headers, config) {
                 var displayName = results["displayName"];
                 var newId = results["id"];
+                var aboutMeInfo = results["aboutMe"];
+                var interestsInfo = results["interests"].toString();
+                var jobTitleInfo = results["jobTitle"];
+                if(jobTitleInfo == null) jobTitleInfo = "Employee";
+                if(aboutMeInfo == null) aboutMeInfo = "My aboutMe section is currently empty.";
+                interestsInfo = "Interests: " + interestsInfo.replace("\"", "").replace("[", "").replace("]", "");
                 apiService.performQuery('GET_BINARY')("https://graph.microsoft.com/beta/users/" + uid +"/photo/$value", "").success(function (results, status, headers, config) {
                     // need to populate list of datalist
                 var arr = new Uint8Array(results);
@@ -160,7 +171,7 @@ $scope.photos = [
                 }
                 var b64 = btoa(raw);
                 var dataURL = b64;                    
-                $scope.cards.push({name: displayName, symbol: '4', id: newId, aboutMe: "me info", interests: "interests6 4", photoData:dataURL});
+                $scope.cards.push({name: displayName, jobTitle: jobTitleInfo, id: newId, aboutMe: aboutMeInfo, interests: interestsInfo, photoData:dataURL});
                 }).error(function (err, status) {
                 });
                 }).error(function (err, status) {
@@ -240,7 +251,8 @@ $scope.photos = [
         }
 
         var functionUserExists = function(){
-            if($scope.userInfo.isAuthenticated){
+            if($scope.userInfo.isAuthenticated && $scope.init == false){
+                $scope.init = true;
                 apiService.performQuery("GET")("https://graph.microsoft.com/v1.0/me", "").success(function (results, status, headers, config) {
                     var id = results["id"];
                     $scope.userId = id;
