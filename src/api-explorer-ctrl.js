@@ -43,6 +43,8 @@ angular.module('ApiExplorer')
         $scope.cards = [
         ];
 
+        $scope.profilecard = {};
+
         $scope.backInterests = function(){
             $scope.showApp = true;
             $scope.showMatches = false;
@@ -52,6 +54,36 @@ angular.module('ApiExplorer')
             $scope.profileId = idVal;
             $scope.showProfile = true;
             $scope.showMatches = false;
+
+            var uid = idVal;
+            var copyUrl = "https://graph.microsoft.com/beta/users/" + idVal +"?$select=interests,aboutMe,displayName,id,jobTitle,userPrincipalName";
+            apiService.performQuery("GET")(copyUrl, "").success(function (results, status, headers, config) {
+            var displayName = results["displayName"];
+            var newId = results["id"];
+            var aboutMeInfo = results["aboutMe"];
+            var interestsInfo = results["interests"].toString();
+            var jobTitleInfo = results["jobTitle"];
+            var userPrincipalName = results["userPrincipalName"];
+            if(jobTitleInfo == null) jobTitleInfo = "Employee";
+            if(aboutMeInfo == null) aboutMeInfo = "My aboutMe section is currently empty.";
+            interestsInfo = "Interests: " + interestsInfo.replace("\"", "").replace("[", "").replace("]", "");
+            apiService.performQuery('GET_BINARY')("https://graph.microsoft.com/beta/users/" + uid +"/photo/$value", "").success(function (results, status, headers, config) {
+                // need to populate list of datalist
+            var arr = new Uint8Array(results);
+
+            //  Don't use fromCharCode.apply as it blows the stack with moderate size images
+            var raw = "";
+            for (var i = 0; i < arr.length; i++) {
+                raw = raw + String.fromCharCode(arr[i]);
+            }
+            var b64 = btoa(raw);
+            var dataURL = b64;
+            $scope.profilecard = {userPrincipalName: userPrincipalName, userName: displayName, jobTitle: jobTitleInfo, id: newId, aboutMe: aboutMeInfo, interests: interestsInfo, photoData:dataURL};
+            }).error(function (err, status) {
+            });
+            }).error(function (err, status) {
+            });                
+            
         }
 
         $scope.backMatches = function(){
@@ -66,7 +98,13 @@ angular.module('ApiExplorer')
                 $scope.matches = [];
 
                 for(var i = 0 ; i < results.length; i++){
-                    $scope.matches.push({ id: results[i].UserId});
+                    var userId = results[i].UserId;
+
+                    apiService.performQuery("GET")("https://graph.microsoft.com/v1.0/users/" + userId, "").success(function (results, status, headers, config) {
+                        var id = results["displayName"];
+                        $scope.matches.push({ id: userId, name: results["displayName"]});
+                    }).error(function (err, status) {
+                    });
                 }
                     
             }).error(function (err, status) {

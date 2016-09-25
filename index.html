@@ -91,20 +91,46 @@ Hey {{displayName}}! Tell me about your interests:
 </div>
 
 <div class=matchElt ng-show="showMatches">
-    <button ng-click="backInterests()">
+    <button ng-click="backInterests()" id=fixedbuttonleft>
     Back
     </button>
     
-    <ul>
-        <li ng-repeat="item in matches"><button ng-click=viewMatchUser(item.id)>{{item.id}}</button></li>
-    </ul>
+    <div style="text-align:center">
+        <ul>
+            <li ng-repeat="item in matches"><button ng-click=viewMatchUser(item.id)>{{item.name}}</button></li>
+        </ul>
+    </div>
 </div>
 
 <div class=profileElt ng-show="showProfile">
-    <button ng-click="backMatches()">
+    <button ng-click="backMatches()" id=fixedbuttonleft>
     Back
     </button>
-    {{profileId}}
+<div class="profile-card">
+
+    <header>
+    
+        <!-- here’s the avatar -->
+        <a href="mailto:{{profilecard.userPrincipalName}}">
+            <img id=img2 data-ng-src="data:image/png;base64,{{profilecard.photoData}}"/>
+        </a>
+        
+        <!-- the username -->
+        <h1>{{profilecard.userName}}</h1>
+        
+        <!-- and role or location -->
+        <h2>{{profilecard.jobTitle}}</h2>
+    
+    </header>
+
+    <!-- bit of a bio; who are you? -->
+    <div class="profile-bio">
+    
+        <p>{{profilecard.interests}}</p>
+    
+    </div>
+
+</div>    
 </div>
 
     <!-- move this into the controller-->
