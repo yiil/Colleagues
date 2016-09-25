@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="InterestsDataAPIContext-Web.config Connection String" description="InterestsDataAPIContext Connection String used in web.config by the application to access the database." defaultValue="Data Source=(localdb)\MSSQLLocalDB; Initial Catalog=InterestsDataAPIContext-20160924121410; Integrated Security=True; MultipleActiveResultSets=True; AttachDbFilename=|DataDirectory|InterestsDataAPIContext-20160924121410.mdf" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\Vivian\\Documents\\Github\\app-service-api-dotnet-todo-list\\src\\ToDoListDataAPI\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='InterestsDataAPIContext']/@connectionString" />
+  </parameter>
+</parameters>
