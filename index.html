@@ -57,6 +57,10 @@ Hey {{displayName}}! Tell me about your interests:
 </div>
 
 <div class=titleElt ng-show="showApp">
+    <button ng-click="showMatchScreen()">
+    Matches
+    </button>
+    
     <div id="viewport">
         <ul class="stack" swing-stack swing-options="options">
             <li
@@ -69,11 +73,28 @@ Hey {{displayName}}! Tell me about your interests:
                 swing-on-dragmove="dragmove(eventName, eventObject)"
                 swing-on-dragend="dragend(eventName, eventObject)"
                 ng-repeat="card in cards">
-                <img src="http://lorempixel.com/130/170/sports/sports" height="150" width="150" unselectable="on">
+                <img height="150" width="150" unselectable="on" data-ng-src="data:image/png;base64,{{card.photoData}}">
                 {{card.name}}
                 </li>
         </ul>
         </div>
+</div>
+
+<div class=matchElt ng-show="showMatches">
+    <button ng-click="backInterests()">
+    Back
+    </button>
+    
+    <ul>
+        <li ng-repeat="item in matches" ng-click=viewMatchUser({{item.id}})>{{item.id}}</li>
+    </ul>
+</div>
+
+<div class=matchElt ng-show="showProfile">
+    <button ng-click="backMatches()">
+    Back
+    </button>
+    {{profileId}}
 </div>
 
     <!--    move this into the controller-->

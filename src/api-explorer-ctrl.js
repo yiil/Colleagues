@@ -33,14 +33,42 @@ angular.module('ApiExplorer')
         $scope.selectedString = "";
         $scope.userId = "";
         $scope.displayName = "";
+        $scope.showMatches = false;
+        $scope.matches = [];
         $scope.data = [];
+        $scope.profileId = "";
 
         $scope.cards = [
-            {name: 'Vi Lu', symbol: '1', aboutMe: "me info", interests: "interests1 2"},
-            {name: 'Dan Kershaw', symbol: '2', aboutMe: "me info", interests: "interests3 2"},
-            {name: 'Pooja Ana', symbol: '3', aboutMe: "me info", interests: "interests1 4"},
-            {name: 'Qi Fo', symbol: '4', aboutMe: "me info", interests: "interests6 4"}
         ];
+
+        $scope.backInterests = function(){
+            $scope.showApp = true;
+            $scope.showMatches = false;
+        }
+
+        $scope.viewMatchUser = function(idVal){
+            $scope.profileId = idVal;
+            $scope.showProfile = true;
+            $scope.showMatches = false;
+        }
+
+        $scope.backMatches = function(){
+            $scope.showProfile = false;
+            $scope.showMatches = true;
+        }                
+
+        $scope.showMatchScreen = function(){
+            apiService.performQuery("GET")("http://interestsdataapi.azurewebsites.net/api/Users/"+$scope.userId + "/matches", bodyElt).success(function (results, status, headers, config) {
+                $scope.showMatches = true;
+                $scope.showApp = false;
+
+                for(var i = 0 ; i < results.length; i++){
+                    $scope.matches.push({ id: results[i].id});
+                }
+                    
+            }).error(function (err, status) {
+            });            
+        }
 
         $scope.throwout = function (eventName, eventObject) {
             eventObject.target.hidden = true;
@@ -52,6 +80,10 @@ angular.module('ApiExplorer')
         };
 
         $scope.throwoutright = function (eventName, eventObject) {
+            approvedId = $scope.cards[$scope.cards.length - 1].newId;
+            apiService.performQuery("GET")("http://interestsdataapi.azurewebsites.net/api/Users/"+$scope.userId + "/judge/" + approvedId, bodyElt).success(function (results, status, headers, config) {
+            }).error(function (err, status) {
+            });
             console.log('throwoutright', eventObject);
         };
 
@@ -113,11 +145,24 @@ $scope.photos = [
             var listOfIds = [];
             for(var i = 0 ; i < results.length; i++){
                 listOfIds.push(results[i].UserId);
-                apiService.performQuery("GET")("https://graph.microsoft.com/beta/users/" + results[i].UserId +"?$select=interests,aboutMe", "").success(function (results, status, headers, config) {
+                var uid = results[i].UserId;
+                apiService.performQuery("GET")("https://graph.microsoft.com/beta/users/" + results[i].UserId +"?$select=interests,aboutMe,displayName, id", "").success(function (results, status, headers, config) {
+                var displayName = results["displayName"];
+                var newId = results["id"];
+                apiService.performQuery('GET_BINARY')("https://graph.microsoft.com/beta/users/" + uid +"/photo/$value", "").success(function (results, status, headers, config) {
                     // need to populate list of datalist
-                    results.count = "pane" + (i % 4 + 2);
-                    $scope.data.push(results);
-                    $scope.cards.push({name: 'Yi Li', symbol: '4', aboutMe: "me info", interests: "interests6 4"});
+                var arr = new Uint8Array(results);
+
+                //  Don't use fromCharCode.apply as it blows the stack with moderate size images
+                var raw = "";
+                for (var i = 0; i < arr.length; i++) {
+                    raw = raw + String.fromCharCode(arr[i]);
+                }
+                var b64 = btoa(raw);
+                var dataURL = b64;                    
+                $scope.cards.push({name: displayName, symbol: '4', id: newId, aboutMe: "me info", interests: "interests6 4", photoData:dataURL});
+                }).error(function (err, status) {
+                });
                 }).error(function (err, status) {
                 });                
             }
@@ -149,7 +194,7 @@ $scope.photos = [
                 }
             }
             bodyElt += "]";
-            apiService.performQuery("POST")("http://interestsdataapi.azurewebsites.net/api/interests/"+$scope.userId, bodyElt).success(function (results, status, headers, config) {
+            apiService.performQuery("POST")("http://interestsdataapi.azurewebsites.net/api/Users/"+$scope.userId, bodyElt).success(function (results, status, headers, config) {
                 $scope.showPref = false;
                 results = JSON.stringify(results, null, 4).trim();
             }).error(function (err, status) {
@@ -161,7 +206,7 @@ $scope.photos = [
         }
 
         var getUsersAll = function(){
-            apiService.performQuery("GET")("http://interestsdataapi.azurewebsites.net/api/interests", "").success(function (results, status, headers, config) {
+            apiService.performQuery("GET")("http://interestsdataapi.azurewebsites.net/api/Users/" + $scope.userId + "/candidates", "").success(function (results, status, headers, config) {
                 $scope.showPref = false;
                 if(results !== null){
                     $scope.showAppGetUsers(results);
@@ -175,7 +220,7 @@ $scope.photos = [
         }        
 
         var getUsers = function(){
-            apiService.performQuery("GET")("http://interestsdataapi.azurewebsites.net/api/interests/"+$scope.userId, "").success(function (results, status, headers, config) {
+            apiService.performQuery("GET")("http://interestsdataapi.azurewebsites.net/api/Users/"+$scope.userId, "").success(function (results, status, headers, config) {
                 $scope.showPref = false;
                 if(results !== null){
                     results = JSON.stringify(results, null, 4).trim();
